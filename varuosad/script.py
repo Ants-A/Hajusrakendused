@@ -11,7 +11,26 @@ def fetch_data():
     response = requests.get(url)
 
     fake_file = StringIO(response.text) #Selleks, et see järgmine command töötaks
-    _data = csv.DictReader(fake_file, delimiter="\t") #CSV formaadist ära objectiks ja delimiter selleks, et täpsustada kuda andmed eraldatud
+    fieldnames = [
+        "id",
+        "nimi",
+        "midagi 1",
+        "midagi 2",
+        "midagi 3",
+        "midagi 4",
+        "midagi 5",
+        "midagi 6",
+        "midagi 7",
+        "midagi 8",
+        "midagi 9",
+        "midagi 10",
+        "midagi 11",
+    ]
+    _data = csv.DictReader(
+        fake_file, 
+        delimiter="\t",
+        fieldnames=fieldnames
+    ) #CSV formaadist ära objectiks ja delimiter selleks, et täpsustada kuda andmed eraldatud
 
     return list(_data)
 
@@ -29,6 +48,7 @@ def home():
     page = []
     for row in range(30):
         page.append(data[row])
+    print(page)
     return jsonify(page)
 
 app.run()   
