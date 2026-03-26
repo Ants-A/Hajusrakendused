@@ -37,19 +37,17 @@ def fetch_data():
 
 app = Flask(__name__)
 
-@app.route('/fetch')
-def fetch():
-    global data #See vajalik, et see mälus oleks
-    data = fetch_data()
-    return "Data olemas" #Flask kahtlane ja vajab, et see returniks midagi
-    
-
 @app.route('/', methods = ["GET", "POST"])
 def home():
+    global data
+    if not data:
+        data = fetch_data()
     current_page = request.args.get("page")
     name = request.args.get("name")
     id = request.args.get("id")
     page = []
+    data.sort(key=lambda x: float(x["hind"].replace(",", ".")))
+
     if name and id:
         for i in range(len(data)):
             if data[i]["nimi"] == name and data[i]["id"] == id:
@@ -75,7 +73,7 @@ def home():
         for row in range(page_count):
             page.append(data[row])
     
-    page.sort(key=lambda x: x["hind"])
+    
     return jsonify(page)
 
 app.run()   
